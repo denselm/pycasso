@@ -1,0 +1,6 @@
+#!/bin/sh
+
+# Copy this script to the remote pi location and use it as the python interpreter for IntelliJ
+# Before using this script for the first time, create a virtual env in the remote pi location
+. /home/denselm/env_pycasso/bin/activate
+exec sudo python $*

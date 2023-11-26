@@ -12,6 +12,9 @@ from io import BytesIO
 
 import keyring
 import openai
+from openai import OpenAI
+
+client = OpenAI(api_key=self.key)
 import requests
 import stability_sdk
 from stability_sdk import client
@@ -240,7 +243,7 @@ class DalleProvider(Provider):
 
         self.get_secret()
 
-        openai.api_key = self.key
+        
         return
 
     def get_image_from_string(self, text, height=0, width=0):
@@ -254,12 +257,12 @@ class DalleProvider(Provider):
                         res = DalleConst.SIZES.value[key]
                         break
 
-            response = openai.Image.create(prompt=text, n=1, size=res)
+            response = client.images.generate(prompt=text, n=1, size=res)
 
             url = response['data'][0]['url']
             img = Image.open(BytesIO(requests.get(url).content))
 
-        except openai.error.APIConnectionError as e:
+        except openai.APIConnectionError as e:
             logging.error(e)
             logging.error("Unable to contact OpenAI. Internet or provider may be down.")
             return None
@@ -322,13 +325,11 @@ class DalleProvider(Provider):
         mask_bytes = io.BytesIO()
         mask.save(mask_bytes, format='PNG')
 
-        response = openai.Image.create_edit(
-            image=mask_bytes.getvalue(),
-            mask=mask_bytes.getvalue(),
-            prompt=text,
-            n=1,
-            size=res
-        )
+        response = client.images.generate(image=mask_bytes.getvalue(),
+        mask=mask_bytes.getvalue(),
+        prompt=text,
+        n=1,
+        size=res)
 
         url = response['data'][0]['url']
         img = Image.open(BytesIO(requests.get(url).content))

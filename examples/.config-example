@@ -32,13 +32,15 @@ resize_external = True
 # See https://github.com/robweber/omni-epd for supported displays for more information on omni-epd options
 
 # Type of EPD display. See https://github.com/robweber/omni-epd for supported displays [string]
-type = omni_epd.mock
+type = waveshare_epd.epd7in5b_V2
 
 # Mode of display [string]
-mode = color
+mode = red 
 
 # Palette filter for dithering. See https://github.com/robweber/omni-epd/wiki/Image-Dithering-Options for more info
 #palette_filter = [[0, 0, 0], [255, 255, 255], [0, 255, 0], [0, 0, 255], [255, 0, 0], [255, 255, 0], [255, 128, 0]]
+#palette_filter=[[0, 0, 0], [255, 255, 255], [255, 0, 0]]
+palette_filter=[128, 0, 0]
 
 [Display]
 #########################
@@ -208,7 +210,7 @@ log_level = 10
 external_amount = 0
 historic_amount = 0
 stability_amount = 0
-dalle_amount = 0
+dalle_amount = 1
 automatic_amount = 0
 
 # Whether to use keychain to manage keys. When set to false will just look for .creds file with credentials in it.
@@ -219,7 +221,7 @@ use_keychain = False
 credential_path = ".creds"
 
 # If all other modes fail or are not selected, show a test image [boolean]
-test_enabled = True
+test_enabled = False
 
 # Host to use for Stable Diffusion online API
 stable_host = "https://api.stability.ai/v1/generation/stable-diffusion-xl-beta-v2-2-2/text-to-image"

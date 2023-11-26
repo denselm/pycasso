@@ -2,12 +2,12 @@
 # Due to the similarity in projects, a lot of this is based on TomWhitwell's install script from SlowMovie
 # https://github.com/TomWhitwell/SlowMovie/blob/main/Install/install.sh
 
-GIT_REPO=https://github.com/jezs00/pycasso
+GIT_REPO=https://github.com/denselm/pycasso
 GIT_BRANCH=main
 SKIP_DEPS=false
 
 # Set the local directory
-LOCAL_DIR="$HOME/$(basename $GIT_REPO)"
+LOCAL_DIR="$HOME/tmp/$(basename $GIT_REPO)"
 PROMPTS_DIR="${LOCAL_DIR}/prompts/"
 IMAGES_DIR="${LOCAL_DIR}/images/"
 
@@ -34,35 +34,35 @@ function install_linux_packages(){
 
 function install_pijuice_package(){
   # Install pijuice.
-  sudo apt-get install -y pijuice-base pijuice-gui
+  apt-get install -y pijuice-base pijuice-gui
   echo -e "PiJuice installed"
 }
 
 function install_python_packages(){
-  sudo pip3 install "git+https://github.com/jezs00/pycasso@$(curl -s https://api.github.com/repos/jezs00/pycasso/releases/latest | jq -r ".tag_name")"
-  sudo pip3 install stability-sdk @ git+https://github.com/Stability-AI/stability-sdk.git
-  sudo pip3 install openai @ git+https://github.com/openai/openai-python.git
+  pip3 install "git+https://github.com/denselm/pycasso@$(curl -s https://api.github.com/repos/denselm/pycasso/releases/latest | jq -r ".tag_name")"
+  pip3 install stability-sdk @ git+https://github.com/Stability-AI/stability-sdk.git
+  pip3 install openai @ git+https://github.com/openai/openai-python.git
 }
 
 function install_python_minimal(){
-  sudo pip3 install "git+https://github.com/jezs00/pycasso@$(curl -s https://api.github.com/repos/jezs00/pycasso/releases/latest | jq -r ".tag_name")" --no-dependencies
+  pip3 install "git+https://github.com/denselm/pycasso@$(curl -s https://api.github.com/repos/denselm/pycasso/releases/latest | jq -r ".tag_name")" --no-dependencies
 }
 
 function uninstall_python_packages(){
-  sudo pip3 uninstall piblo -y
+  pip3 uninstall piblo -y
   echo -e "pycasso (piblo) package uninstalled"
 }
 
 function fix_grpcio(){
   echo -e "${YELLOW}This might take a while... Be patient...${RESET}"
-  sudo pip3 uninstall grpcio grpcio-tools -y
-  sudo pip3 install grpcio==1.44.0 --no-binary=grpcio grpcio-tools==1.44.0 --no-binary=grpcio-tools
+  pip3 uninstall grpcio grpcio-tools -y
+  pip3 install grpcio==1.44.0 --no-binary=grpcio grpcio-tools==1.44.0 --no-binary=grpcio-tools
   echo -e "GRPCIO fix applied"
 }
 
 function update_grpcio(){
-  sudo pip3 uninstall grpcio grpcio-tools -y
-  sudo pip3 install grpcio grpcio-tools --upgrade
+  pip3 uninstall grpcio grpcio-tools -y
+  pip3 install grpcio grpcio-tools --upgrade
   echo -e "GRPCIO update applied"
 }
 
@@ -237,20 +237,21 @@ function install_pycasso(){
     cp "${LOCAL_DIR}/examples/.creds-example" "${LOCAL_DIR}/.creds"
   fi
 
-  if [ -f "${LOCAL_DIR}/prompts" ]; then
-    mkdir "${LOCAL_DIR}/prompts"
+  if [ ! -f "${LOCAL_DIR}/prompts" ]; then
+    mkdir -p "${LOCAL_DIR}/prompts"
+    echo "Created directory ${LOCAL_DIR}/prompts"
   fi
 
-  if [ -f "${LOCAL_DIR}/images" ]; then
-    mkdir "${LOCAL_DIR}/images"
+  if [ ! -f "${LOCAL_DIR}/images" ]; then
+    mkdir -p "${LOCAL_DIR}/images"
   fi
 
-  if [ -f "${LOCAL_DIR}/images/generated" ]; then
-    mkdir "${LOCAL_DIR}/images/generated"
+  if [ ! -f "${LOCAL_DIR}/images/generated" ]; then
+    mkdir -p "${LOCAL_DIR}/images/generated"
   fi
 
-  if [ -f "${LOCAL_DIR}/images/external" ]; then
-    mkdir "${LOCAL_DIR}/images/external"
+  if [ ! -f "${LOCAL_DIR}/images/external" ]; then
+    mkdir -p "${LOCAL_DIR}/images/external"
   fi
 
   if [ ! -f "${LOCAL_DIR}/prompts/artists.txt" ]; then
